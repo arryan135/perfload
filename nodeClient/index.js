@@ -71,7 +71,6 @@ const getCpuLoad = () => {
   });
 }
 
-
 performanceData().then(allPerformanceData => {
   console.log(allPerformanceData);
 })
