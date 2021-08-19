@@ -1,6 +1,12 @@
 // node program that captures local performance data
 const os = require("os");
+const io = require("socket.io-client");
+let socket = io("http://127.0.0.1:8181");
 const cpus = os.cpus();
+
+socket.on("connect", () => {
+  console.log("I connected to the socket server.... ")
+});
 
 const performanceData = () => {
   return new Promise(async (resolve, reject) => {
