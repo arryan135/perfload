@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 mongoose.connect("mongodb://127.0.0.1:27017/perfData", {useNewUrlParser: true, useUnifiedTopology: true});
-const machine = require("./models/Machine.js");
+const Machine = require("./models/Machine.js");
 
 const socketMain = (io, socket) => {
 
@@ -22,13 +22,37 @@ const socketMain = (io, socket) => {
   });
 
   // check to see if new machine has connected, also add it
-  socket.on("initPerfData", data => {
+  socket.on("initPerfData", async (data) => {
     macA = data.macA;
-    
+    // check the mongodb
+    const mongooseResponce = await checkAndAdd(data);
+    console.log(mongooseResponce);
   });
 
   socket.on("perfData", data => {
     console.log(data);
+  });
+}
+
+const checkAndAdd = (data) => {
+  return new Promise((resolve, reject) => {
+    Machine.findOne(
+      {macA: data.macA},
+      (err, doc) => {
+        if (err){
+          throw err;
+          reject(err);
+        } else if (doc === null){
+          // add to the db 
+          let newMachine = new Machine(data);
+          newMachine.save();
+          resolve("added");
+        } else{
+          // machine exists in the database
+          resolve("found");
+        }
+      }
+    );
   });
 }
 
