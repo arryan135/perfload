@@ -12,7 +12,11 @@ socket.on("connect", () => {
   // loop through all the machine's network interfaces and fine a non-interval MAC address
   for (let key in nI){
     if (!nI[key][0].interval){
-      macA = nI[key][0].mac;
+      if (nI[key][0].mac === "00:00:00:00:00:00"){
+        macA = Math.random().toString(36).substr(2, 15);
+      } else{
+        macA = nI[key][0].mac;
+      }
       break;
     }
   }
@@ -29,6 +33,7 @@ socket.on("connect", () => {
   // get performance data runs every 1 second
   let perfDataInterval = setInterval(() => {
     performanceData().then(allPerformanceData => {
+      allPerformanceData.macA = macA;
       socket.emit("perfData", allPerformanceData);
     });
   }, 1000);

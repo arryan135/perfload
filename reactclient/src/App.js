@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import logo from './logo.svg';
 import './App.css';
 import socket from "./utilities/socketConnection"
+import Widget from "./Widget";
 
 class App extends Component{
   constructor(){
@@ -13,27 +14,26 @@ class App extends Component{
 
   componentDidMount() {
     socket.on("data", data => {
-      console.log(data);
+      // update state
+      const currentState = ({...this.state.performanceData});
+      currentState[data.macA] = data;
+      this.setState({
+        performanceData: currentState
+      })
     });
   }
 
   render() {
+    let widgets = [];
+    const data = this.state.performanceData;
+    // grab each machine 
+    Object.entries(data).forEach(([key, value]) => {
+      widgets.push(<Widget key = {key} data = {value}/>);
+    });
+
     return (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        {widgets}
       </div>
     );
   }
