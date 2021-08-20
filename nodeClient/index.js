@@ -5,9 +5,10 @@ let socket = io("http://127.0.0.1:8181");
 const cpus = os.cpus();
 
 socket.on("connect", () => {
+
   // use unique MAC address to identify this machine
   const nI = os.networkInterfaces();
-  let macAddress;
+  let macA;
   // loop through all the machine's network interfaces and fine a non-interval MAC address
   for (let key in nI){
     if (!nI[key][0].interval){
@@ -19,7 +20,13 @@ socket.on("connect", () => {
   // client auth with single key value
   socket.emit("clientAuth", "35ot8efoet7eofhu");
 
-  // get performance data every 1 second
+  // runs only once
+  performanceData().then(allPerformanceData => {
+    allPerformanceData.macA = macA;
+    socket.emit("initPerfData", allPerformanceData);
+  });
+
+  // get performance data runs every 1 second
   let perfDataInterval = setInterval(() => {
     performanceData().then(allPerformanceData => {
       socket.emit("perfData", allPerformanceData);
