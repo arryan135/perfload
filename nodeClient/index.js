@@ -11,6 +11,12 @@ socket.on("connect", () => {
   let macA;
   // loop through all the machine's network interfaces and fine a non-interval MAC address
   for (let key in nI){
+
+    //=========FOR TESTING PURPOSES=============
+    macA = Math.floor(Math.random() * 3) + 1;
+    break;
+    //=========FOR TESTING PURPOSES=============
+
     if (!nI[key][0].interval){
       if (nI[key][0].mac === "00:00:00:00:00:00"){
         macA = Math.random().toString(36).substr(2, 15);
@@ -59,6 +65,8 @@ const performanceData = () => {
     const numCores = cpus.length;
     const cpuLoad = await getCpuLoad();
 
+    const isActive = true;
+
     resolve({
       freeMem, 
       totalMem, 
@@ -69,7 +77,8 @@ const performanceData = () => {
       cpuModel,
       numCores,
       cpuSpeed,
-      cpuLoad
+      cpuLoad,
+      isActive
     });
   });
 }
