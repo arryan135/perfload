@@ -28,6 +28,15 @@ const socketMain = (io, socket) => {
     }
   });
 
+  socket.on("disconnect", () => {
+    Machine.find({macA: macA}, (err, docs) => {
+      if (docs.length > 0){
+        docs[0].isActive = false;
+        io.to("ui").emit("data", docs[0]);
+      }
+    });
+  });
+
   // check to see if new machine has connected, also add it
   socket.on("initPerfData", async (data) => {
     macA = data.macA;
