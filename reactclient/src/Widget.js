@@ -25,9 +25,12 @@ class Widget extends Component {
       macA,
       isActive
     } = this.props.data;
+
+    const cpuWidgetId = `cpu-widget-${macA}`;
+    const memWidgetId = `mem-widget-${macA}`;
     
-    const cpu = {cpuLoad};
-    const mem = {totalMem, usedMem, memUsage, freeMem};
+    const cpu = {cpuLoad, cpuWidgetId};
+    const mem = {totalMem, usedMem, memUsage, freeMem, memWidgetId};
     const info = {macA, osType, upTime, cpuModel, numCores, cpuSpeed};
 
     let notActiveDiv = "";
