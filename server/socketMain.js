@@ -16,6 +16,12 @@ const socketMain = (io, socket) => {
       // a valid ui client has joined
       socket.join("ui");
       console.log("A react client has joined!");
+      Machine.find({}, (err, docs) => {
+        docs.forEach(aMachine => {
+          aMachine.isActive = false;
+          io.to("ui").emit("data", aMachine);
+        });
+      });
     } else{
       // an invalid client has joined. GoodBye
       socket.disconnect(true);
