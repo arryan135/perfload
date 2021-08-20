@@ -15,6 +15,7 @@ const socketMain = (io, socket) => {
     } else if (key === "39458fo57o4734o57"){
       // a valid ui client has joined
       socket.join("ui");
+      console.log("A react client has joined!");
     } else{
       // an invalid client has joined. GoodBye
       socket.disconnect(true);
